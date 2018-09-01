@@ -1,14 +1,14 @@
-'''
-Tratamiento de imagenes 
-Introduccion a la ciencia de los datos
-'''
+#Librerias
 import matplotlib.image as pltimg
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 from prettytable import PrettyTable
 from skimage import io
+#Funciones Definidas
+##Limpiar Consola
 clear=lambda: os.system('clear')
+##Generar bordes de las imagenes para evitar errores al recorrer la imagen
 def duplicarBordes(matriz):
     bordeSup=matriz[:][0]
     bordeInf=matriz[:][matriz.shape[0]-1]
@@ -21,6 +21,7 @@ def duplicarBordes(matriz):
     matriz=np.hstack((bordeIzq,matriz))
     matriz=np.hstack((matriz,bordeDer))
     return matriz
+##Suavizado de imagene
 def suavizadoImagen(matriz):
     col=matriz.shape[1]
     fil=matriz.shape[0]
@@ -30,6 +31,7 @@ def suavizadoImagen(matriz):
             pro=matriz[i-1,j-1]+matriz[i-1,j]+matriz[i-1,(j+1)]+matriz[i,j-1]+matriz[i,j]+matriz[i,(j+1)]+matriz[(i+1),j-1]+matriz[(i+1),j]+matriz[(i+1),(j+1)]
             imagenSuavizada[i,j]=pro/9
     return imagenSuavizada
+##Identificación de bordes de la imagen
 def bordesImagen(matriz):
     col=matriz.shape[1]
     fil=matriz.shape[0]
@@ -41,14 +43,6 @@ def bordesImagen(matriz):
     for i in range(1,col-1):
         for j in range(1,fil-1):
             imagenBordes2[j,i]=matriz[j,i]-matriz[j+1,i]
-    '''
-    for i in range(1,matriz.shape[0]-1):
-        for j in range(1,matriz.shape[1]-1):
-            if abs(imagenBordes1[i,j]-imagenBordes1[i,j-1]) >0.1:
-                imagenBordes2[i,j]=1
-            else:
-                imagenBordes2[i,j]=0
-    '''
     imagenCompuesta=((imagenBordes2)**2+(imagenBordes1)**2)**0.5
     for i in range(1,col-1):
         for j in range(1,fil-1):
@@ -57,6 +51,7 @@ def bordesImagen(matriz):
             elif imagenCompuesta[j,i]<0:
                 imagenCompuesta[j,i]=0
     return imagenCompuesta
+##Menu de opciones de modificacion de imagen
 def Menu():
     menu= PrettyTable(['Filtro','Opcion'])
     menu.add_row(['Suavizado','1'])
@@ -79,6 +74,7 @@ def Menu():
         clear()
         print("Ingrese de nuevo la opcion")
         Menu()
+#Ejecución del programa
 clear()
 img=io.imread('rickymorty.jpg',True)    
 imagen=(duplicarBordes(img))
