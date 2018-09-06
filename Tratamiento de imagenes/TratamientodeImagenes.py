@@ -31,7 +31,7 @@ def suavizadoImagen(matriz):
             pro=matriz[i-1,j-1]+matriz[i-1,j]+matriz[i-1,(j+1)]+matriz[i,j-1]+matriz[i,j]+matriz[i,(j+1)]+matriz[(i+1),j-1]+matriz[(i+1),j]+matriz[(i+1),(j+1)]
             imagenSuavizada[i,j]=pro/9
     return imagenSuavizada
-##Identificación de bordes de la imagen
+##Identificacion de bordes de la imagen
 def bordesImagen(matriz):
     col=matriz.shape[1]
     fil=matriz.shape[0]
@@ -48,9 +48,23 @@ def bordesImagen(matriz):
         for j in range(1,fil-1):
             if imagenCompuesta[j,i]>1:
                 imagenCompuesta[j,i]=1
-            elif imagenCompuesta[j,i]<0:
-                imagenCompuesta[j,i]=0
+            elif imagenCompuesta[j,i]<-1:
+                imagenCompuesta[j,i]=-1
     return imagenCompuesta
+##Perfilado de la imagen
+def perfiladoImagen(matriz):
+    col=matriz.shape[1]
+    fil=matriz.shape[0]
+    imagenPerfilada=np.zeros((fil,col))
+    for i in range(1,matriz.shape[0]-1):
+        for j in range(1,matriz.shape[1]-1):
+            pro=-1*matriz[i-1,j-1]+-1*matriz[i-1,j]+-1*matriz[i-1,(j+1)]+-1*matriz[i,j-1]+9*matriz[i,j]+-1*matriz[i,(j+1)]+-1*matriz[(i+1),j-1]+-1*matriz[(i+1),j]+-1*matriz[(i+1),(j+1)]
+            if pro>1:
+                pro=1
+            elif pro<-1:
+                pro=-1
+            imagenPerfilada[i,j]=pro
+    return imagenPerfilada
 ##Menu de opciones de modificacion de imagen
 def Menu():
     menu= PrettyTable(['Filtro','Opcion'])
@@ -69,12 +83,14 @@ def Menu():
         io.imsave('imagenBordeada.png',imagenBordeada)
         print("Imagen generada como 'imagenBordeada.png'")
     elif opcion==3:
-        print("opcion3") 
+        imagenPerfilada=perfiladoImagen(imagen)
+        io.imsave('imagenPerfilada.png',imagenPerfilada)
+        print("Imagen generada como 'imagenPErfilada.png'")
     else:
         clear()
         print("Ingrese de nuevo la opcion")
         Menu()
-#Ejecución del programa
+#Ejecucion del programa
 clear()
 img=io.imread('rickymorty.jpg',True)    
 imagen=(duplicarBordes(img))
