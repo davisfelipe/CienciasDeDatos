@@ -7,7 +7,7 @@ import numpy as np
 from skimage import io
 from random import shuffle
 
-img=io.imread('los-simpson-400x400.jpg',True)
+img=io.imread('simpson.jpg',True)
 
 #obtiene 16 pedazos de la imagen de 100*100 pixeles
 chunks = np.array([img[y:y+100,x:x+100] for x in [0,100,200,300] for y in [0,100,200,300]])
